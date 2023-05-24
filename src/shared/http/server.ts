@@ -1,9 +1,11 @@
-import 'reflect-metadata';
 import '../typeorm';
+import 'express-async-errors';
+import 'reflect-metadata';
+import AppError from './errors/AppError';
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
 import routes from './routes';
-import AppError from './errors/AppError';
+import { errors } from 'celebrate';
 
 const app = express();
 
@@ -15,6 +17,8 @@ app.use(express.json());
 
 app.use(routes);
 
+app.use(errors());
+
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof AppError) {
     res.status(err.statusCode).json({
@@ -22,6 +26,8 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
       message: err.message,
     });
   }
+
+  console.log(err);
 
   res.status(500).json({
     status: 'error',
