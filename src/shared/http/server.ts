@@ -4,6 +4,7 @@ import 'reflect-metadata';
 import AppError from './errors/AppError';
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
+import expressStatusMonitor from 'express-status-monitor';
 import routes from './routes';
 import { errors } from 'celebrate';
 
@@ -14,6 +15,7 @@ const port = 3333;
 
 app.use(cors());
 app.use(express.json());
+app.use(expressStatusMonitor());
 
 app.use(routes);
 
