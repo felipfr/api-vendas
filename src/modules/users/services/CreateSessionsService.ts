@@ -1,6 +1,7 @@
 import AppError from '@shared/http/errors/AppError';
 import User from '../typeorm/entities/User';
 import UsersRepository from '../typeorm/repositories/UsersRepository';
+import authConfig from '@config/auth';
 import { compare } from 'bcryptjs';
 import { getCustomRepository } from 'typeorm';
 import { sign } from 'jsonwebtoken';
@@ -30,9 +31,9 @@ class CreateSessionsService {
       throw new AppError('Incorrect email/password combination.', 401);
     }
 
-    const token = sign({}, 'fbba245cd0ead911b4e0c54978763b14', {
+    const token = sign({}, authConfig.jwt.secret, {
       subject: user.id,
-      expiresIn: '1d',
+      expiresIn: authConfig.jwt.expiresIn,
     });
 
     return {
