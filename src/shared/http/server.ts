@@ -6,6 +6,7 @@ import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
 import expressStatusMonitor from 'express-status-monitor';
 import routes from './routes';
+import uploadConfig from '@config/upload';
 import { errors } from 'celebrate';
 
 const app = express();
@@ -16,6 +17,7 @@ const port = 3333;
 app.use(cors());
 app.use(express.json());
 app.use(expressStatusMonitor());
+app.use('/files', express.static(uploadConfig.directory));
 app.use(routes);
 app.use(errors());
 
