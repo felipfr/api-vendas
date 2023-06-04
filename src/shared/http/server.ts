@@ -41,9 +41,9 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 app.listen(port, hostname, () => {
-  // break the app if the required variables in the .env file are missing
+  // break the app if the required variables are missing
   if (!process.env.APP_WEB_URL || !process.env.JWT_SECRET_KEY) {
-    throw new Error('Check the variables in the .env file!');
+    throw new Error('Check the environment variables!');
   }
 
   console.log(
