@@ -1,6 +1,7 @@
-import '../typeorm';
-import 'express-async-errors';
 import 'reflect-metadata';
+import '../typeorm';
+import 'dotenv/config';
+import 'express-async-errors';
 import AppError from './errors/AppError';
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
@@ -12,8 +13,10 @@ import { pagination } from 'typeorm-pagination';
 
 const app = express();
 
-const hostname = 'localhost';
-const port = 3333;
+const hostname = process.env.SERVER_HOSTNAME || 'localhost';
+const port = process.env.SERVER_PORT
+  ? parseFloat(process.env.SERVER_PORT)
+  : 3333;
 
 app.use(cors());
 app.use(express.json());
@@ -38,6 +41,11 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 app.listen(port, hostname, () => {
+  // break the app if the required variables in the .env file are missing
+  if (!process.env.APP_WEB_URL || !process.env.JWT_SECRET_KEY) {
+    throw new Error('Check the variables in the .env file!');
+  }
+
   console.log(
     '\x1b[33m%s\x1b[0m',
     `Server running on http://${hostname}:${port} 🥳`,
