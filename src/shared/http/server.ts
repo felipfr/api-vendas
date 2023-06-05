@@ -4,8 +4,14 @@ import 'dotenv/config';
 import 'express-async-errors';
 import AppError from './errors/AppError';
 import cors from 'cors';
-import express, { NextFunction, Request, Response } from 'express';
+import express, {
+  NextFunction,
+  Request,
+  Response,
+  RequestHandler,
+} from 'express';
 import expressStatusMonitor from 'express-status-monitor';
+import rateLimiter from '@shared/http/middlewares/rateLimiter';
 import routes from './routes';
 import uploadConfig from '@config/upload';
 import { errors } from 'celebrate';
@@ -21,6 +27,7 @@ const port = process.env.SERVER_PORT
 app.use(cors());
 app.use(express.json());
 app.use(expressStatusMonitor());
+app.use(rateLimiter as RequestHandler);
 app.use(pagination);
 app.use('/files', express.static(uploadConfig.directory));
 app.use(routes);
