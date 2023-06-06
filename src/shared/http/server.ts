@@ -49,8 +49,12 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 app.listen(port, hostname, () => {
   // break the app if the required variables are missing
-  if (!process.env.APP_WEB_URL || !process.env.JWT_SECRET_KEY) {
-    throw new Error('Check the environment variables!');
+  if (
+    !process.env.APP_WEB_URL ||
+    !process.env.JWT_SECRET_KEY ||
+    !process.env.MAIL_DRIVER
+  ) {
+    throw new AppError('Check the environment variables!', 500);
   }
 
   console.log(
