@@ -52,7 +52,8 @@ app.listen(port, hostname, () => {
   if (
     !process.env.APP_WEB_URL ||
     !process.env.JWT_SECRET_KEY ||
-    !process.env.MAIL_DRIVER
+    !process.env.MAIL_DRIVER ||
+    !process.env.STORAGE_DRIVER
   ) {
     throw new AppError('Check the environment variables!', 500);
   }
