@@ -1,7 +1,6 @@
 import HandlebarsMailTemplate from './HandlebarsMailTemplate';
-import aws from 'aws-sdk';
 import mailConfig from '@config/mail/mail';
-import nodemailer from 'nodemailer';
+import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 
 interface IMailContact {
   name: string;
@@ -32,26 +31,34 @@ export default class SESMail {
     templateData,
   }: ISendMail): Promise<void> {
     const mailTemplate = new HandlebarsMailTemplate();
-
-    const transporter = nodemailer.createTransport({
-      SES: new aws.SES({
-        apiVersion: '2010-12-01',
-      }),
-    });
+    const sesClient = new SESClient({ region: 'us-east-1' });
 
     const { email, name } = mailConfig.defaults.from;
+    const html = await mailTemplate.parse(templateData);
 
-    const message = await transporter.sendMail({
-      from: {
-        name: from?.name || name,
-        address: from?.email || email,
+    const params = {
+      Source: `${from?.name || name} <${from?.email || email}>`,
+      Destination: {
+        ToAddresses: [`${to.name} <${to.email}>`],
       },
-      to: {
-        name: to.name,
-        address: to.email,
+      Message: {
+        Subject: {
+          Data: subject,
+        },
+        Body: {
+          Html: {
+            Data: html,
+          },
+        },
       },
-      subject,
-      html: await mailTemplate.parse(templateData),
-    });
+    };
+
+    try {
+      const command = new SendEmailCommand(params);
+      await sesClient.send(command);
+    } catch (err) {
+      console.error('Error sending email:', err);
+      throw err;
+    }
   }
 }
