@@ -6,12 +6,12 @@
   "password": "your_password",
   "database": "your_database",
   "entities": [
-    "./src/modules/**/typeorm/entities/*.ts"
+    "./src/modules/**/typeorm/entities/*.ts" // change for "./dist/modules/**/typeorm/entities/*.js" in production
   ],
   "migrations": [
-    "./src/shared/typeorm/migrations/*.ts"
+    "./src/shared/typeorm/migrations/*.ts" // change for "./dist/shared/typeorm/migrations/*.js" in production
   ],
   "cli": {
-    "migrationsDir": "./src/shared/typeorm/migrations"
+    "migrationsDir": "./src/shared/typeorm/migrations" // change for "./dist/shared/typeorm/migrations" in production
   }
 }
