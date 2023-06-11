@@ -22,9 +22,10 @@ export default class S3StorageProvider {
     }
 
     const fileContent = await fs.promises.readFile(originalPath);
+    const s3Key = `avatar/${file}`;
     await this.client.putObject({
       Bucket: uploadConfig.config.aws.bucket,
-      Key: file,
+      Key: s3Key,
       ACL: 'public-read',
       Body: fileContent,
       ContentType,
@@ -35,9 +36,10 @@ export default class S3StorageProvider {
   }
 
   public async deleteFile(file: string): Promise<void> {
+    const s3Key = `avatar/${file}`;
     await this.client.deleteObject({
       Bucket: uploadConfig.config.aws.bucket,
-      Key: file,
+      Key: s3Key,
     });
   }
 }

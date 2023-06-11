@@ -32,7 +32,7 @@ class User {
       return null;
     }
 
-    return `${process.env.APP_WEB_URL}/files/${this.avatar}`;
+    return `${process.env.AVATAR_BASE_URL}/avatar/${this.avatar}`;
   }
 
   @CreateDateColumn()

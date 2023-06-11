@@ -29,7 +29,7 @@ app.use(express.json());
 app.use(expressStatusMonitor());
 app.use(rateLimiter as RequestHandler);
 app.use(pagination);
-app.use('/files', express.static(uploadConfig.directory));
+app.use('/avatar', express.static(uploadConfig.directory));
 app.use(routes);
 app.use(errors());
 
@@ -53,9 +53,10 @@ app.listen(port, hostname, () => {
     !process.env.APP_WEB_URL ||
     !process.env.JWT_SECRET_KEY ||
     !process.env.MAIL_DRIVER ||
-    !process.env.STORAGE_DRIVER
+    !process.env.STORAGE_DRIVER ||
+    !process.env.AVATAR_BASE_URL
   ) {
-    throw new AppError('Check the environment variables!', 500);
+    throw new AppError('Check the required environment variables!', 500);
   }
 
   console.log(
