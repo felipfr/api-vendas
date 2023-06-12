@@ -1,5 +1,5 @@
-import CreateOrderService from '../services/CreateOrderService';
-import ShowOrderService from '../services/ShowOrderService';
+import CreateOrderService from '../../../services/CreateOrderService';
+import ShowOrderService from '../../../services/ShowOrderService';
 import { Request, Response } from 'express';
 
 export default class OrdersController {

@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import '../typeorm';
+import '@shared/infra/typeorm';
 import 'dotenv/config';
 import 'express-async-errors';
 import AppError from './errors/AppError';
@@ -11,7 +11,7 @@ import express, {
   RequestHandler,
 } from 'express';
 import expressStatusMonitor from 'express-status-monitor';
-import rateLimiter from '@shared/http/middlewares/rateLimiter';
+import rateLimiter from '@shared/infra/http/middlewares/rateLimiter';
 import routes from './routes';
 import uploadConfig from '@config/upload';
 import { errors } from 'celebrate';

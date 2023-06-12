@@ -1,4 +1,4 @@
-import UpdateUserAvatarService from '../services/UpdateUserAvatarService';
+import UpdateUserAvatarService from '../../../services/UpdateUserAvatarService';
 import { Request, Response } from 'express';
 import { instanceToInstance } from 'class-transformer';
 

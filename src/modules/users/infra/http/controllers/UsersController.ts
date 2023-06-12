@@ -1,5 +1,5 @@
-import CreateUserService from '../services/CreateUserService';
-import ListUserService from '../services/ListUserService';
+import CreateUserService from '../../../services/CreateUserService';
+import ListUserService from '../../../services/ListUserService';
 import { Request, Response } from 'express';
 import { instanceToInstance } from 'class-transformer';
 

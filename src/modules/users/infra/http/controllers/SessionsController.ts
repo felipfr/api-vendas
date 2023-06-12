@@ -1,4 +1,4 @@
-import CreateSessionsService from '../services/CreateSessionsService';
+import CreateSessionsService from '../../../services/CreateSessionsService';
 import { Request, Response } from 'express';
 import { instanceToInstance } from 'class-transformer';
 
