@@ -1,4 +1,4 @@
-import AppError from '@shared/http/errors/AppError';
+import AppError from '@shared/infra/http/errors/AppError';
 import Redis from 'ioredis';
 import { RateLimiterRedis } from 'rate-limiter-flexible';
 import { Request, Response, NextFunction } from 'express';
