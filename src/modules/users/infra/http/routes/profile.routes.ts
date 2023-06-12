@@ -1,5 +1,5 @@
 import ProfileController from '../controllers/ProfileController';
-import isAuthenticated from '@shared/http/middlewares/isAuthenticated';
+import isAuthenticated from '@shared/infra/http/middlewares/isAuthenticated';
 import { Router } from 'express';
 import { celebrate, Joi, Segments } from 'celebrate';
 

@@ -1,4 +1,4 @@
-import Customer from '@modules/customers/typeorm/entities/Customer';
+import Customer from '@modules/customers/infra/typeorm/entities/Customer';
 import Order from '../entities/Order';
 import { EntityRepository, Repository } from 'typeorm';
 
