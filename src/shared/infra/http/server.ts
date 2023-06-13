@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import '@shared/container';
 import '@shared/infra/typeorm';
 import 'dotenv/config';
 import 'express-async-errors';
