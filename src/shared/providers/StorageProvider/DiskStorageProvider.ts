@@ -1,19 +1,22 @@
 import fs from 'fs';
 import path from 'path';
+import sanitizeFilename from 'sanitize-filename';
 import uploadConfig from '@config/upload';
 
 export default class DiskStorageProvider {
   public async saveFile(file: string): Promise<string> {
+    const sanitizedFile = sanitizeFilename(file);
     await fs.promises.rename(
-      path.resolve(uploadConfig.tmpFolder, file),
-      path.resolve(uploadConfig.directory, file),
+      path.resolve(uploadConfig.tmpFolder, sanitizedFile),
+      path.resolve(uploadConfig.directory, sanitizedFile),
     );
 
-    return file;
+    return sanitizedFile;
   }
 
   public async deleteFile(file: string): Promise<void> {
-    const filePath = path.resolve(uploadConfig.directory, file);
+    const sanitizedFile = sanitizeFilename(file);
+    const filePath = path.resolve(uploadConfig.directory, sanitizedFile);
 
     try {
       await fs.promises.stat(filePath);

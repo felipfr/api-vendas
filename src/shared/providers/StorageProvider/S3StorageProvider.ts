@@ -1,6 +1,7 @@
 import fs from 'fs';
 import mime from 'mime';
 import path from 'path';
+import sanitizeFilename from 'sanitize-filename';
 import uploadConfig from '@config/upload';
 import { S3 } from '@aws-sdk/client-s3';
 
@@ -14,7 +15,8 @@ export default class S3StorageProvider {
   }
 
   public async saveFile(file: string): Promise<string> {
-    const originalPath = path.resolve(uploadConfig.tmpFolder, file);
+    const sanitizedFile = sanitizeFilename(file);
+    const originalPath = path.resolve(uploadConfig.tmpFolder, sanitizedFile);
     const ContentType = mime.getType(originalPath);
 
     if (!ContentType) {
@@ -22,7 +24,7 @@ export default class S3StorageProvider {
     }
 
     const fileContent = await fs.promises.readFile(originalPath);
-    const s3Key = `avatar/${file}`;
+    const s3Key = `avatar/${sanitizedFile}`;
     await this.client.putObject({
       Bucket: uploadConfig.config.aws.bucket,
       Key: s3Key,
@@ -32,11 +34,12 @@ export default class S3StorageProvider {
     });
 
     await fs.promises.unlink(originalPath);
-    return file;
+    return sanitizedFile;
   }
 
   public async deleteFile(file: string): Promise<void> {
-    const s3Key = `avatar/${file}`;
+    const sanitizedFile = sanitizeFilename(file);
+    const s3Key = `avatar/${sanitizedFile}`;
     await this.client.deleteObject({
       Bucket: uploadConfig.config.aws.bucket,
       Key: s3Key,
