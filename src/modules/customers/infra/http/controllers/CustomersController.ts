@@ -2,7 +2,7 @@ import CreateCustomerService from '@modules/customers/services/CreateCustomerSer
 import DeleteCustomerService from '@modules/customers/services/DeleteCustomerService';
 import ListCustomerService from '@modules/customers/services/ListCustomerService';
 import ShowCustomerService from '@modules/customers/services/ShowCustomerService';
-import UpdateCustomerService from '../../../services/UpdateCustomerService';
+import UpdateCustomerService from '@modules/customers/services/UpdateCustomerService';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
@@ -36,7 +36,7 @@ export default class CustomersController {
   public async update(req: Request, res: Response): Promise<Response> {
     const { name, email } = req.body;
     const { id } = req.params;
-    const updateCustomer = new UpdateCustomerService();
+    const updateCustomer = container.resolve(UpdateCustomerService);
     const customer = await updateCustomer.execute({
       id,
       name,
