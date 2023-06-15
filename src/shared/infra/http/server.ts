@@ -20,43 +20,53 @@ import { pagination } from 'typeorm-pagination';
 
 const app = express();
 
+// Server config
 const hostname = process.env.SERVER_HOSTNAME || 'localhost';
 const port = process.env.SERVER_PORT
   ? parseFloat(process.env.SERVER_PORT)
   : 3333;
 
-app.use(cors());
-app.use(express.json());
-app.use(expressStatusMonitor());
-app.use(rateLimiter as RequestHandler);
-app.use(pagination);
-app.use('/avatar', express.static(uploadConfig.directory));
-app.use(routes);
-app.use(errors());
+// Middlewares
+app.use(cors()); // Enable CORS
+app.use(express.json()); // Allows the use of JSON in requests
+app.use(expressStatusMonitor()); // Add an Express Status Monitor
+app.use(rateLimiter as RequestHandler); // Request rate control middleware
+app.use(pagination); // Pagination middleware using TypeORM
+app.use('/avatar', express.static(uploadConfig.directory)); // Define the '/avatar' route to serve static files from the upload directory
+app.use(routes); // Add the routes defined in the 'routes' file
+app.use(errors()); // Error handling middleware for data validation using the 'celebrate' package
 
+// Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof AppError) {
     res.status(err.statusCode).json({
       status: 'error',
       message: err.message,
     });
+  } else {
+    res.status(500).json({
+      status: 'error',
+      message: 'Internal Server Error',
+    });
   }
-
-  res.status(500).json({
-    status: 'error',
-    message: 'Internal Server Error',
-  });
 });
 
+// Server startup
 app.listen(port, hostname, () => {
-  // break the app if the required variables are missing
-  if (
-    !process.env.APP_WEB_URL ||
-    !process.env.JWT_SECRET_KEY ||
-    !process.env.MAIL_DRIVER ||
-    !process.env.STORAGE_DRIVER ||
-    !process.env.AVATAR_BASE_URL
-  ) {
+  // Break the app if the required variables are missing
+  const requiredEnvVariables = [
+    'APP_WEB_URL',
+    'JWT_SECRET_KEY',
+    'MAIL_DRIVER',
+    'STORAGE_DRIVER',
+    'AVATAR_BASE_URL',
+  ];
+
+  const missingEnvVariables = requiredEnvVariables.filter(
+    variable => !process.env[variable],
+  );
+
+  if (missingEnvVariables.length > 0) {
     throw new AppError('Check the required environment variables!', 500);
   }
 
