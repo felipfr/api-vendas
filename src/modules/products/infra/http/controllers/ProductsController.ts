@@ -1,9 +1,10 @@
 import CreateProductService from '../../../services/CreateProductService';
 import DeleteProductService from '../../../services/DeleteProductService';
 import ListProductService from '../../../services/ListProductService';
-import ShowProductService from '../../../services/ShowProductService';
+import ShowProductService from '@modules/products/services/ShowProductService';
 import UpdateProductService from '../../../services/UpdateProductService';
 import { Request, Response } from 'express';
+import { container } from 'tsyringe';
 
 export default class ProductsController {
   public async index(req: Request, res: Response): Promise<Response> {
@@ -15,7 +16,7 @@ export default class ProductsController {
 
   public async show(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
-    const showProduct = new ShowProductService();
+    const showProduct = container.resolve(ShowProductService);
     const product = await showProduct.execute({ id });
 
     return res.json(product);
