@@ -1,7 +1,7 @@
 import CreateCustomerService from '@modules/customers/services/CreateCustomerService';
 import DeleteCustomerService from '@modules/customers/services/DeleteCustomerService';
 import ListCustomerService from '@modules/customers/services/ListCustomerService';
-import ShowCustomerService from '../../../services/ShowCustomerService';
+import ShowCustomerService from '@modules/customers/services/ShowCustomerService';
 import UpdateCustomerService from '../../../services/UpdateCustomerService';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
@@ -16,7 +16,7 @@ export default class CustomersController {
 
   public async show(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
-    const showCustomer = new ShowCustomerService();
+    const showCustomer = container.resolve(ShowCustomerService);
     const customer = await showCustomer.execute({ id });
 
     return res.json(customer);
